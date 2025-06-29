@@ -26,13 +26,12 @@ public class SlotMachine {
 
         String[] slotSymbols = {"🍒", "🍋", "🔔", "💎", "⭐"};
         String[] spin;
-        String confirm;
         double multiplier;
         double winnings;
         double finalWinnings = 0;
         boolean isRepeat = false;
         int count = 0;
-        double betAmount;
+        double betAmount = 0;
 
 
 
@@ -41,28 +40,46 @@ public class SlotMachine {
         double startingCapital = capital;
         in.nextLine();
 
+        System.out.println("Feeling lucky?");
 
         do {
             System.out.println("Your balance is $" + capital);
 
-            System.out.println("Feeling lucky? y/n");
-            confirm = in.nextLine();
-            if (!"y".equalsIgnoreCase(confirm)) {
-                break;
-            } else {
-                System.out.println("How much would you like to bet?");
-                betAmount = in.nextDouble();
+
+                System.out.println("How would you like to bet?");
+                System.out.println("1. All IN");
+                System.out.println("2. Manual bet");
+            System.out.println("3. Add funds");
+                int option = in.nextInt();
                 in.nextLine();
+
+                if(option == 1) {
+                  betAmount = capital;
+                }else if(option == 2){
+                    System.out.println("Enter bet amount");
+                    betAmount = in.nextDouble();
+                    in.nextLine();
+                }
+
 
                 if (betAmount > capital || betAmount <= 0) {
                     System.out.println("Insufficient balance/Invalid amount");
                     break;
                 } else {
                     capital -= betAmount;
-                    if (capital <= 0) {
+                    if (capital < 0) {
                         System.out.println("You're out of funds!");
-                        break;
-                    }
+                        System.out.println("Would you like to add more?");
+                        String option1 = in.nextLine();
+
+                        if(option1.equalsIgnoreCase("y")){
+                            System.out.println("How much are you adding?");
+                            capital = in.nextInt();
+                            in.nextLine();
+                        }
+                        else if(option1.equalsIgnoreCase("n"))
+                            break;
+                        }
                 }
 
                 spin = Slots(slotSymbols);
@@ -102,7 +119,7 @@ public class SlotMachine {
                 }
 
                 // [Winning logic continues here...]
-            }
+
 
 
             System.out.println("Would you like to continue?");
@@ -113,6 +130,19 @@ public class SlotMachine {
             }else if(repeat.equalsIgnoreCase("no") || repeat.equalsIgnoreCase("n")){
                 break;
 
+            }
+            if (capital == 0) {
+                System.out.println("You're out of funds!");
+                System.out.println("Would you like to add more?");
+                String option1 = in.nextLine();
+
+                if(option1.equalsIgnoreCase("y")){
+                    System.out.println("How much are you adding?");
+                    capital = in.nextInt();
+                    in.nextLine();
+                }
+                else if(option1.equalsIgnoreCase("n"))
+                    break;
             }
             count++;
         }
